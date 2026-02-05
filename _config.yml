@@ -2,8 +2,8 @@ title: Project Steakholder Documentation
 description: Comprehensive documentation for Project Steakholder
 remote_theme: just-the-docs/just-the-docs
 
-baseurl: ""
-url: ""
+baseurl: "/project-docs"
+url: "https://project-steak-holder.github.io"
 
 color_scheme: light
 
