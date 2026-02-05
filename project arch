@@ -1,0 +1,311 @@
+Stakeholder Agent System
+Architecture
+Document
+Regis University - MSSE 692: Software Engineering Practicum I
+Matt Bass, Anthony Perez, Joseph Turner, Ramesh
+Kondala
+2-1-2026
+Executive Summary
+This document describes the architecture of the Stakeholder Agent System, an AI-driven web applica>on
+designed to provide so?ware engineering students with realis>c, repeatable prac>ce in requirements
+elicita>on. The system addresses a recurring challenge in academic environments: limited access to real
+stakeholders for authen>c elicita>on exercises. The architecture presented here is derived directly from
+the system’s func>onal and quality aEribute requirements defined in Week 2 and reflects deliberate
+trade-offs appropriate for an 8-week prac>cum project.
+The selected architectural approach is a mul>->er web applica>on architecture. The system is organized
+into dis>nct logical >ers: a presenta>on >er implemented as a browser-based web frontend, an
+applica>on >er implemented as a backend API, and a data >er providing durable persistence for users,
+sessions, chat history, and elicited requirements. In addi>on, the system integrates with external
+plaOorm services for authen>ca>on and AI inference. This structure provides a clear separa>on of
+concerns while keeping the overall design simple enough to develop, deploy, and maintain within the
+project’s >me and resource constraints.
+Several key architectural decisions define the system. First, session durability and recovery are treated as
+first-class concerns: the backend applica>on >er is designed to be stateless, with all conversa>onal state
+persisted in the data >er so students can resume work a?er interrup>ons or failures. Second, AI
+integra>on is isolated behind a controlled adapter layer, allowing the system to handle retries, enforce
+guardrails, and remain resilient to AI provider outages without impac>ng user data. Third, authen>ca>on
+is delegated to an external iden>ty provider, reducing security risk and development effort while
+ensuring strict per-user data isola>on.
+The architecture primarily addresses three quality aEribute priori>es. Availability and reliability are
+achieved through durable storage, stateless services, and graceful degrada>on during external service
+failures. Performance is supported through asynchronous AI calls, responsive UI behavior, and efficient
+prompt construc>on to meet the requirement of sub-5-second responses for most interac>ons.
+Modifiability is enabled through clear >er boundaries, externalized configura>on for personas and
+scenarios, and provider abstrac>on for AI services.
+Several trade-offs are consciously accepted. The backend applica>on >er is implemented as a single
+logical service rather than decomposed into microservices, priori>zing simplicity and delivery speed over
+fine-grained scalability. Advanced features such as mul>-user sessions, instructor dashboards, and
+automated grading are deferred to future itera>ons. These trade-offs are appropriate for an MVP
+developed under academic constraints and provide a solid architectural founda>on for future extension.
+Architectural Drivers Analysis
+Architectural drivers are the quality aEributes and constraints that most strongly influence the system’s
+structure and major design decisions. While the Stakeholder Agent System has many requirements, only
+a subset materially shapes the architecture. Based on Week 2 quality aEribute scenarios and MVP
+constraints, the following are iden>fied as the top architectural drivers.
+Driver :1Availability / Reliability (Session Durability and Recovery)
+Referenced Week 2 Scenario: Availability / Reliability Scenario (AI provider down>me, service
+interrup>on, resume exact session state)
+The system must preserve elicita>on history and allow students to resume their sessions a?er
+interrup>ons, including temporary AI provider failures (e.g., 503 errors), applica>on restarts, or transient
+infrastructure issues. If this driver is not addressed architecturally, the system fails its primary
+educa>onal purpose: students will lose progress, repeat work, or abandon the tool due to unreliability.
+This driver directly influences the mul>->er architecture by requiring a durable data >er and a stateless
+applica>on >er capable of recovering state from persistent storage.
+Key architectural implica>ons:
+• Durable storage of sessions, chat history, and elicited requirements in the data >er
+• Stateless backend applica>on >er that can restart without losing session state
+• Controlled AI integra>on with retries and circuit breaker paEerns to degrade gracefully during AI
+outages
+• Clear user-facing error handling that preserves session con>nuity
+Driver 2: Performance (Responsive Conversational Interaction)
+Referenced Week 2 Scenario: Performance Scenario (≤ 5 seconds for 95% of responses at ~30 concurrent
+sessions; UI remains responsive)
+The system must provide a responsive conversa>onal experience. If AI responses are slow or the UI
+becomes unresponsive during AI calls, students will disengage and the elicita>on prac>ce will be less
+effec>ve. This driver shapes both the presenta>on and applica>on >ers. The frontend must remain
+usable while awai>ng AI responses, and the backend must op>mize AI request handling, prompt size,
+and outbound connec>on reuse.
+Key architectural implica>ons:
+• Asynchronous/non-blocking AI call handling in the applica>on >er
+• Frontend behavior that does not freeze during AI calls (responsive UI while wai>ng)
+• Token budge>ng and prompt construc>on strategies to reduce LLM latency and cost
+• Basic rate limi>ng and load management to maintain performance under peak use
+Driver 3: Modifiability (Evolving Personas, Scenarios, and Providers)
+Referenced Week 2 Scenario: Modifiability Scenario (add/update personas and scenarios through
+configura>on; provider flexibility)
+Although the MVP begins with a limited scenario and a single stakeholder persona, the system must
+support future evolu>on to remain valuable beyond the prac>cum. The ability to add or update
+stakeholder personas, project scenarios, and AI provider choices without architectural rework is essen>al
+to prevent the system from becoming briEle or “one-off.” This driver strongly influences the mul>->er
+architecture by emphasizing clear separa>on of concerns and stable interfaces between internal
+components and external services.
+Key architectural implica>ons:
+• Externalized configura>on for persona and scenario defini>ons (data-driven rather than hardcoded)
+• An AI provider adapter/facade boundary so that switching providers does not affect session logic
+• Modular boundaries within the applica>on >er (session management, guardrails, prompt
+building, persistence access)
+• Tests focused on core behaviors (resume session, isola>on, guardrails) to enable safe changes
+Architecture Overview
+Architectural Style
+The Stakeholder Agent System is designed using mul>->er web applica>on architecture. The system
+separates concerns across dis>nct logical >ers: presenta>on, applica>on, and data, while relying on
+external plaOorm services for authen>ca>on and AI inference. This structure supports reliability,
+performance, and modifiability goals while remaining simple enough to deliver within the prac>cum’s
+constraints.
+Key Structural Elements
+• Front-End Applica0on:
+A browser-based frontend web applica>on that provides a chat interface, displays session
+history, and manages user interac>ons. Programmed in Typescript with TanStack Start
+• AI Service:
+A backend API responsible for core business logic, including session lifecycle management, AI
+prompt orchestra>on, authoriza>on enforcement, and guardrail applica>on. Programmed in
+Python with Pydan>c AI
+• Data Store:
+Likely AWS ES2. There are many possibili>es. Will consider other op>ons as needed.
+• External PlaOorm Services:
+o Authen0ca0on Provider
+for iden>ty and access control
+o AI Provider
+accessed via a controlled adapter layer
+o Cloud Hos0ng Provider
+leaning towards 25 Gig free AWS account.
+Integration Approach
+The Front-End Applica>on will make structured calls through the AI Service abstract base class(Interface)
+to the underlying AI Service. The Auth Integra>on element in the Applica>on layer will authen>cate
+users through its API once a provider is selected. The AI Service will make SQL calls to the data store to
+persist or restore session data. The AI Service will call to the backend LLM through its API. The request
+(ques>on) from the user and the assembled context will be sent to the backend LLM.
+Deployment Architecture
+The front-end and backend are deployed as separate components within a cloud environment. The
+backend is stateless (build context for each request), allowing for restart or redeployment without loss of
+user data. The database provides durable storage, while authen>ca>on and AI services are consumed as
+managed external dependencies.
+Architecture Views (C4 Model)
+Level 1: Context Diagram
+Level 2: Container Diagram
+Level 3: Component Diagram 1 (Application)
+Level 3: Component Diagram 2 (AI Service)
+Quality Attribute Achievement Strategy
+QA Scenario: Performance
+Tactics Applied:
+• Handled AI calls asynchronously using non-blocking I/O.
+• Storing the stable context (such as scenario, persona, and key facts) helps to keep the prompt
+size smaller and more manageable.
+• U>lized connec>on pooling to op>mize AI and client libraries.
+• Basic load and rate limi>ng mechanisms to prevent overload.
+How Achieved:
+• The backend efficiently handles AI requests by sending them asynchronously. It streams or
+returns responses without blocking the UI thread, ensuring the browser stays responsive and
+smooth while wai>ng.
+• Sta>c or slowly changing context, like project descrip>ons or persona profiles, is stored
+separately and reused in prompts. This approach helps reduce latency and token costs by
+avoiding the need to resend the en>re conversa>on each >me.
+• The AI client is set up with connec>on pooling, allowing it to be reused across requests to help
+reduce the overhead of semng up new connec>ons.
+• Simple rate limi>ng is implemented per user or session to prevent accidental overloads, such as
+spamming the “send” buEon. This helps keep the P95 latency at or below 5 seconds during the
+expected peak load.
+QA Scenario: Availability / Reliability
+Tactics Applied:
+• Retried using exponen>al backoff to handle temporary AI/API failures.
+• Implemented a circuit breaker for external AI provider access.
+• Reliable storage of session and conversa>on state.
+• Health checks alongside basic monitoring and alerts.
+How Achieved:
+• For temporary issues like 5xx errors from the AI provider, the system kindly retries a set number
+of >mes with a gentle backoff before showing an error. This helps reduce the chances of
+students seeing failures.
+• A circuit breaker tracks ongoing AI failures; when ac>vated, it halts provider calls briefly and
+shows a friendly “temporarily unavailable” message while maintaining state, avoiding cascading
+
+> meouts.
+> • Conversa>on history and requirements are stored securely in a trusted database, allowing
+> students to pick up right where they le? off even if the app restarts. This way, they won’t lose
+> their progress and can con>nue smoothly.
+> • We carefully monitor applica>on and dependency health endpoints. When we no>ce repeated
+> failures or high error rates, we promptly send alerts to our team so they can step in early and
+> help prevent a significant impact on students.
+> QA Scenario: Security
+> Tactics Applied:
+> • Authen>ca>on and role-based access control (RBAC).
+> • Data isola>on at the tenant or user level and queries are limited to only necessary privileges.
+> • Transport and at-rest encryp>on.
+> • Input valida>on and output filtering / AI guardrails.
+> How Achieved:
+> • Access to the app always requires login (such as username/password or OAuth), with each
+> request associated with an authen>cated iden>ty. In the future, role dis>nc>ons like instructor
+> versus student could limit access to admin and repor>ng features.
+> • All database queries are limited by user or session IDs, ensuring students can only view and edit
+> their own sessions. Shared tables are not accessible without specific filters and read/write
+> permissions are kept to a minimum in the backend.
+> • TLS is used for all network traffic, and the database or managed storage is set up to encrypt data
+> at rest. This helps keep chat logs and other informa>on safe from intercep>on or the?.
+> • Every user input to the AI is carefully checked and cleaned to make sure everything stays safe
+> and on track. Prompts and responses go through special guardrail checks that prevent off-topic,
+> prompt-injec>on, or unsafe content, and any suspicious ac>vity is logged for review, helping
+> keep our interac>ons secure and friendly.
+> QA Scenario: Modifiability
+> Tactics Applied:
+> • We use externalized configura>ons for scenarios and personas, making things data-driven
+> instead of hard-coded. This approach helps keep things flexible and easy to update.
+> • This layered architecture thoughOully separates concerns like UI, domain, infrastructure, and AI
+> adapter, making the system more organized and easier to manage.
+> • Implementa>on of abstrac>on for the AI provider via a pluggable provider interface.
+> • Automated tests focus on fundamental behaviors.
+> How Achieved:
+> • Project scenarios and stakeholder personas are stored as configura>ons, like JSON or database
+> records. They are loaded at run>me, so whenever you want to add or adjust them, there's no
+> need to change the code, just update the data.
+> • The system is thoughOully organized into layers: the front-end takes care of the presenta>on, the
+> domain layer manages sessions and requirements, and infrastructure adapters handle
+> persistence and AI calls. This setup makes it easier to update or change one part without
+> affec>ng the others, offering a flexible and resilient structure.
+> • AI access is designed through an adaptable interface, allowing providers like OpenAI, Claude, and
+> others to be easily swapped or configured. This way, you can make changes without needing to
+> rewrite your core business logic, making upgrades or adjustments smoother and more
+> straighOorward.
+> • Unit and integra>on tests thoroughly cover important workflows like resume session, guardrails,
+> and performance constraints. This way, whenever there are changes in scenarios or
+> infrastructure, any regressions are iden>fied quickly, ensuring a smooth and safe development
+> process over many semesters.
+> Technology Selection Rationale
+> We have chosen to separate the system into a TypeScript full-stack applica>on and an independent
+> Python AI service. This division directly supports our extensibility requirement for adding new
+> stakeholder personas and project scenarios. Any changes to AI behavior stay isolated in the Python
+> service without risking the core applica>on. This separa>on also enables our 99.9% up>me goal since we
+> can update, restart, and scale the AI service independently. When the AI service experiences issues, the
+> main applica>on will remain available for students to view their conversa>on history or manage their
+> profiles.
+> Given this architecture, Python became the clear choice for the AI service. Python currently dominates
+> the AI ecosystem with libraries like Pydan>cAI and LangChain that provide the capabili>es we need.
+> Beyond the ecosystem support, Python's AI tooling gives us fine-grained control over error handling and
+> response streaming, which is essen>al for our UI responsiveness requirements around clear error
+> messages for erra>c AI behavior. When the AI produces unexpected responses or hits rate limits, we can
+> provide students with specific, ac>onable feedback rather than generic failures.
+> The data these services manage follows clear paEerns that led us to a rela>onal database. Users own
+> conversa>ons, conversa>ons contain messages, and these rela>onships are stable and well-defined. A
+> rela>onal database enforces these rela>onships and directly supports our data resiliency and session
+> con>nuity requirements. If a student's session is interrupted, we can quickly retrieve the exact
+> conversa>on state from related tables and resume where they le? off. Database transac>ons ensure
+> conversa>on history remains consistent even during failures, and the structured schema prevents data
+> corrup>on that could lose student progress.
+> For communica>on between our TypeScript applica>on and Python AI service, we chose REST because
+> student interac>ons follow a simple request-response paEern: students send a message and receive an
+> AI response. Our 5-second response >me goal for AI interac>ons at 30 concurrent students with 500-
+> character requests is easily achievable with REST. The stateless nature of REST directly supports our 30-
+> second down>me recovery goal. When services restart, clients simply retry their requests without
+> complex state reconstruc>on. Our retry strategy with exponen>al backoff maps naturally to REST's
+> request-response model, and standard HTTP status codes make it straighOorward to determine which
+> requests should be retried.
+> Finally, because user data privacy is non-nego>able with student informa>on, we are u>lizing an external
+> authen>ca>on provider. This provider handles encrypted storage and transmission as their core
+> competency, elimina>ng our risk of mishandling passwords, sessions, or personal data. They maintain
+> the high availability we need since authen>ca>on down>me blocks all student access. Cri>cally, these
+> providers prevent us from accidentally logging sensi>ve user data during authen>ca>on flows, which
+> directly sa>sfies our requirement that no user data appears in logs or error messages. Building this
+> ourselves would mean ongoing security maintenance that diverts effort from our core development
+> while introducing significant risk.
+> Architectural Constraints and Assumptions
+> Constraints
+> • 8-week development window.
+> • Limited team architecture experience.
+> • Distributed team.
+> • Exis>ng team knowledgebase.
+> • Extremely limited to no budget.
+> • Current capabili>es and requirements of LLM APIs.
+> • Current capabili>es of AI frameworks and libraries.
+> • Cost of cloud hos>ng.
+> • Requirements for 3rd party integra>ons (auth, data storage, cloud)
+> • Requirement for data privacy.
+> Assumptions
+> • Con>nued availability of LLM APIs at no or manageable cost.
+> • Con>nued affordable access to cloud hos>ng.
+> • Con>nued availability of 3rd party authen>ca>on service.
+> • Con>nued availability of 3rd party data storage.
+> • Currently available AI frameworks and libraries will suit system requirements.
+> • Required MVP func>onality can be implemented in 3 weeks.
+> Risks and Mitigations
+> Risk Mi0ga0on
+> LLM API could become unavailable (company
+> goes bankrupt, etc.).
+> There are mul>ple LLM APIs available that could
+> suit requirements.
+> Cloud providers could go out of business or raise
+> price out of means to extend investment.
+> design for portability to other cloud provider.
+> 3rd party auth service could become unavailable
+> (provider out of business, raise cost).
+> Design for modularity of 3rd party integra>ons.
+> Cloud provider down>me. Select a provider with good redundancy
+> mechanisms.
+> Auth provider down>me. Select provider with good up->me track record.
+> User data could be intercepted by unauthorized
+> party when communica>ng with LLM API.
+> Encrypt transmiEed data.
+> Saved data could be accessed by unauthorized
+> party.
+> Encrypt stored data, requires authen>ca>on to
+> access.
+> A user’s data could be accessed by an
+> unauthorized individual.
+> Require login with username/password.
+> User may want/need to stop/resume elicita>on
+> work without losing progress.
+> Implement save/restore of chat func>onality.
+> Team Architecture Review Summary
+> Date: 01/30/26 6pm
+> AAendees: Anthony Perez, Joe Turner, MaE Bass, Ramesh Kondala
+> The team reviewed and considered 2 compe>ng architectures. Anthony produced an
+> architecture that centered on a TanStack applica>on that calls a python/pydan>c lightweight AI service
+> that in turn calls an LLM API on the back end. This architecture located all the AI context logic in the
+> applica>on leaving the AI service as a rela>vely simple adapter. MaE proposed a unified applica>on
+> that leveraged only python/pydan>c. At first the team leaned towards Anthony’s concept due to
+> performance concerns. Through discussion it became apparent that loca>ng the context logic in the
+> pydan>c service offered numerous benefits to managing the context, so the Two compe>ng
+> architectures were combined.
+> The result is a TanStack front-end applica>on wriEen in TypeScript and the backend AI service
+> that will contain the context logic to leverage the convenience and efficiency of the pydan>c framework.
+> The biggest outstanding concern is the performance of retrieving the conversa>on history for each
+> backend LLM request. A few different caching solu>ons were very briefly discussed simply to prove their
+> prac>cality should they turn out to be needed, but the Minimum Viable Product (mvp) delivered in this
+> short development window likely will not include any performance op>miza>ons.

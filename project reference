@@ -1,0 +1,118 @@
+Project Proposal
+AI-Driven Stakeholder Simulation for Requirements Elicitation
+MSSE 692 Software Engineering Practicum I
+January 18th, 2026
+Matt Bass, Anthony Perez, Joseph Turner, Ramesh Kondala
+Executive Summary
+Problem Statement and Background
+Goals and Objectives
+Primary Goal
+Objective 1
+Objective 2
+Objective 3
+Objective 4
+Scope Definition
+In Scope
+Out of Scope
+Assumptions
+Constraints
+Approach and Methodology
+Deliverables
+Technical Deliverables
+Documentation
+Presentations and Demonstrations
+Timeline and Milestones
+Risks and Mitigation Strategies
+Success Criteria
+Executive Summary
+This project proposes the design and implementation of a proof-of-concept AI-driven stakeholder simulation tool intended to support requirements elicitation practice in software engineering education. A persistent challenge in academic software projects is the lack of consistent access to real stakeholders, limiting students’ opportunities to practice authentic requirements gathering and stakeholder communication. This system addresses that gap by simulating a realistic project stakeholder who represents a business problem and engages in iterative requirements elicitation conversations with a development team.
+Users will configure project parameters such as team size, experience level, skill composition, and project duration. Based on these constraints, the system will generate a small set of viable project scenarios. Once a scenario is selected, the AI stakeholder will remain contextually consistent and respond to elicitation questions in alignment with the defined business parameters and previously elicited requirements. Over the duration of the project, the system will capture and persist elicited requirements for review and refinement.
+This project will deliver a minimal viable project (MVP) providing the core stakeholder interaction functionality with management of the project context that constrains new results and conversation to generate responses that fit with previously established project details. Initial project selection may or may not be completed within the 8-week project timeframe depending on the effort required to implement the core requirement elicitation functionality and context management. This determination will be made after primary requirement definition and prioritization is completed in week two which will inform more detailed practical project scoping.
+Problem Statement and Background
+Effective requirements elicitation is a foundational skill in software engineering yet is one of the most difficult competencies to practice authentically in academic settings. While students are taught elicitation techniques such as interviews, workshops, and stakeholder analysis, they are often unable to engage with real stakeholders due to scheduling constraints, availability, confidentiality concerns or the artificial nature of class projects. As a result, many students complete software engineering programs with limited experience conducting realistic stakeholder conversations.
+In typical academic projects, instructors or teammates act as proxy stakeholders. While useful, these approaches lack consistency, realism, and the dynamic nature of real-world stakeholder interactions. Proxy stakeholders may unconsciously guide students towards correct answers, limit ambiguity, or fail to introduce realistic constraints and tradeoffs. This reduces the effectiveness of requirements elicitation and diminishes the realism of the project outcomes.
+The lack of authentic elicitation affects students, instructors, and programs alike. Students graduate with theoretical knowledge but limited applied practice. Instructors must balance instructional goals with the potential logistical burden of role-playing stakeholders. Programs struggle to provide repeatable, scalable elicitation experiences.
+Large language models make it feasible to simulate constrained, role-specific interactions. When properly scoped and architected, AI can serve as a consistently available, and configurable stakeholder proxy. This project leverages that capability to address a well-defined educational gap. If the problem is not addressed, students will continue to encounter requirements elicitation primarily for the first time in post-educational settings, increasing project risk and onboarding time.
+Goals and Objectives
+Primary Goal
+Design and implement a proof-of-concept AI-driven stakeholder simulation tool that enables realistic requirements elicitation practices within an academic software engineering project.
+Objective 1
+Generate and persist a constrained project scenario aligned with the provided configuration parameters.
+Objective 2
+Enable interactive, test-based stakeholder communication that supports iterative requirements elicitation while maintaining contextual consistency.
+Objective 3
+Capture and store elicited requirements in a structured format suitable for review and refinement.
+Objective 4
+Implement a project configuration mechanism that captures team characteristics and project constraints, including team size, experience level, skills, and duration.
+Scope Definition
+In Scope
+· A single AI-simulated stakeholder persona per project
+· Text-based interaction between users and the stakeholder
+· Context persistence for a single project scenario
+· Storage of elicited requirements
+· Configurable project setup inputs
+(re-assess whether in scope after collecting requirements wk 2)
+Out of Scope
+· Multiple stakeholders or stakeholder conflict simulation
+· Automated evaluation or scoring of requirement quality
+· Natural language validation or ambiguity detection
+· Memory across unrelated projects
+· AI-model training or fine-tuning
+· Authentication and authorization
+· Scalability and security
+Assumptions
+· Access to external AI API is available for development
+· Users understand the system is a training and simulation tool
+· Stakeholder behavior is intentionally constrained
+Constraints
+· 8-week project timeline
+· 3-week implementation timeline
+Approach and Methodology
+The project will follow an iterative development approach with Agile practices. Planning, validation, and architecture definition occur first, followed by incremental implementation and refinement.
+The system architecture will emphasize context management, project configuration data, stakeholder persona definition, and elicitation history. AI behavior will be guided through prompt engineering rather than model training. Technical implementation decisions will prioritize clarity and maintainability.
+Quality will be ensured through manual testing of elicitation scenarios, peer reviews of prompts, architecture decisions, and demonstration-based validation.
+Deliverables
+Technical Deliverables
+· Working AI stakeholder simulation prototype
+· Requirements capture and persistence mechanism
+Documentation
+· User guide for system operation
+Presentations and Demonstrations
+· Live demonstration of a requirements elicitation
+· Final project presentation
+Timeline and Milestones
+Risks
+Risk Description
+Impact
+Probability
+Mitigation Strategy
+AI responses lack consistency
+High
+Medium
+Constrain prompts and limit context scope
+Team learning curve with AI APIS, SDKs, etc.
+Medium
+Medium
+Early prototyping and shared learning
+Scope creep
+High
+Medium
+Adherence to out-of-scope definitions
+Compressed implementation timeline
+Medium
+High
+Front-load design and validation activities
+Success Criteria
+Technical success will be demonstrated by a functioning prototype that supports project stakeholder interaction, consistent context management, requirements capture and potentially project configuration. Stakeholder satisfaction will be measured with feedback from industry expert Morgan Worrell. This project represents a Capstone experience for the Software Engineering Graduate program at Regis University. As such program learning success will be evaluated by the team’s demonstrated synthesis of requirements engineering, project management, architectural design principles and technical implementation. Portfolio success will be assessed by the project’s suitability for demonstration.
+Appendix A: Project Selection Process
+Each team member brought three potential project ideas to the kickoff meeting to form a pool of twelve possibilities. During the meeting we discussed the pros, cons, feasibility and risks of the twelve choices and narrowed the list to the top five contenders. Then we performed a ranked choice vote to choose the winner and confirmed everyone was happy with that choice.
+This is the AI summarized notes for the project selection portion of our conversation:
+Project Selection(final list of choices):
+Ramesh 1: Traffic Safety Idea
+Joe 2: Save URLs to web app and potentially have AI analyze articles and give talking
+points / review information / fact checking. Extra: Chrome plugin capture page into
+your vault.
+Matt 3: Stakeholder agent
+Matt 4: Collectibles web scraper
+Anthony 5: Meal planner with AI
+Final Selection: Stakeholder AI Agent app
