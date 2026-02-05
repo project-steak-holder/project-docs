@@ -7,7 +7,7 @@ url: "https://project-steak-holder.github.io"
 
 color_scheme: light
 
-logo: "/project-docs/assets/logo.png"
+logo: "assets/logo.png"
 
 search_enabled: true
 search:
