@@ -30,25 +30,6 @@ aux_links:
 
 aux_links_new_tab: true
 
-collections:
-  docs:
-    permalink: "/:collection/:path/"
-    output: true
-
-just_the_docs:
-  collections:
-    docs:
-      name: Documentation
-      nav_fold: false
-
-defaults:
-  - scope:
-      path: "docs"
-      type: "docs"
-    values:
-      layout: default
-      nav_fold: false
-
 exclude:
   - README.md
   - Gemfile

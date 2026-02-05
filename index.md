@@ -1,11 +1,9 @@
 ---
 layout: home
-title: Home
+title: Overview
 nav_order: 1
 description: "Comprehensive documentation for Project Steakholder"
 permalink: /
 ---
 
-# Project Steakholder Documentation
-
-Welcome to the documentation for Project Steakholder.
+# Project Steakholder
