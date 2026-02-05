@@ -1,0 +1,10 @@
+title: Project Steakholder Documentation
+description: Comprehensive documentation for Project Steakholder
+theme: jekyll-theme-cayman
+
+# GitHub Pages settings
+baseurl: ""
+url: ""
+
+# Navigation
+nav_order: true
