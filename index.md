@@ -17,7 +17,3 @@ Project Steakholder is an AI-driven stakeholder simulation tool designed to help
 - **Requirements Capture** - Automatically captures and persists elicited requirements as you work through the simulation
 - **Configurable Project Parameters** - Customize scenarios based on team size, experience level, available skills, and project duration to match your learning objectives
 - **Viable Scenario Generation** - Generates realistic project scenarios that respect your configured constraints and provide meaningful practice opportunities
-
-## Getting Started
-
-Ready to begin practicing your requirements elicitation skills? Head over to the [Getting Started](docs/getting-started) guide for installation instructions and your first simulation walkthrough.
