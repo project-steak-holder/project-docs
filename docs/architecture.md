@@ -23,8 +23,8 @@ The system consists of four primary tiers that communicate through well-defined 
         |                                       |
         v                                       v
 +------------------+                   +------------------+
-|  Authentication  |                   |   Data Store     |
-|    Provider      |                   |   (Relational)   |
+|    Neon Auth     |                   |   Data Store     |
+|                  |                   |   (Neon Postgres)|
 +------------------+                   +--------+---------+
                                                 |
                                        +--------v---------+
@@ -36,11 +36,11 @@ The system consists of four primary tiers that communicate through well-defined 
 **Data Flow:**
 
 1. Users interact with the browser-based chat interface
-2. The front-end authenticates users via the external authentication provider
+2. The front-end authenticates users via Neon Auth
 3. User messages are sent to the AI Service via REST API
-4. The AI Service manages applies guardrails, and orchestrates prompts
+4. The AI Service applies guardrails and orchestrates prompts
 5. AI requests flow through an adapter layer to the external LLM provider
-6. All session data, chat history, and captured requirements persist to the relational database
+6. All session data, chat history, and captured requirements persist to Neon Postgres
 
 ### C4 Model Diagrams
 
@@ -75,15 +75,13 @@ The Python-based backend service serves as the central orchestration layer for a
 
 **Responsibilities:**
 
-- Session lifecycle management
 - AI prompt orchestration and context assembly
-- Authorization and access control
 - Input validation and AI guardrails
 - Rate limiting and token budget management
 
 ### Data Store
 
-A relational database hosted on AWS provides durable persistence for all application state. This tier ensures session continuity and enables recovery from service interruptions.
+Neon Postgres provides durable persistence for all application state. As a serverless Postgres platform, Neon ensures session continuity and enables recovery from service interruptions while offering scalable, managed database infrastructure.
 
 **Persisted Entities:**
 
@@ -94,7 +92,7 @@ A relational database hosted on AWS provides durable persistence for all applica
 
 ### External Platform Services
 
-**Authentication Provider:** Handles identity verification and token management, allowing the system to delegate security concerns to a specialized service.
+**Neon Auth:** Handles identity verification, session management, and token management, allowing the system to delegate security concerns to a specialized service integrated with the Neon platform.
 
 **AI Provider:** Large language model access through a controlled adapter layer that provides abstraction, retry logic, and resilience patterns.
 
@@ -109,7 +107,7 @@ Three primary quality attributes drive the architectural decisions in this syste
 Session durability is critical for a practice environment where users invest significant time in requirements elicitation conversations. The architecture addresses this through:
 
 - **Stateless backend design** - The AI Service maintains no in-memory state, enabling horizontal scaling and seamless recovery
-- **Durable data tier** - All session state persists to the relational database before acknowledgment
+- **Durable data tier** - All session state persists to Neon Postgres before acknowledgment
 - **Circuit breaker patterns** - AI provider outages are isolated and handled gracefully
 
 ### Performance
@@ -168,14 +166,7 @@ The system must evolve to support new stakeholder personas, project scenarios, a
 
 ## Technology Stack
 
-| Layer          | Technology                 | Purpose                                  |
-| -------------- | -------------------------- | ---------------------------------------- |
-| Front-End      | TypeScript, TanStack Start | Browser-based chat interface             |
-| AI Service     | Python, Pydantic AI        | Session management, prompt orchestration |
-| Data Store     | Relational Database (AWS)  | Persistent storage                       |
-| Communication  | REST APIs                  | Service integration                      |
-| Authentication | External Provider          | Identity management                      |
-| Hosting        | AWS                        | Cloud infrastructure                     |
+For a detailed breakdown of technologies used in this system, see the [Technology Stack]({% link docs/technology-stack.md %}) page.
 
 ## Key Design Decisions
 
@@ -198,11 +189,12 @@ AI integration is isolated behind an adapter interface that handles:
 
 ### Delegated Authentication
 
-Authentication is handled by an external identity provider rather than a custom implementation. This approach:
+Authentication is handled by Neon Auth rather than a custom implementation. This approach:
 
 - Reduces security implementation burden
 - Leverages proven identity management infrastructure
 - Simplifies compliance with security standards
+- Integrates seamlessly with the Neon Postgres data tier
 
 ### REST Communication Pattern
 
@@ -221,3 +213,14 @@ The backend is implemented as a single logical service rather than decomposed mi
 - Avoids premature optimization for scale not yet required
 
 The architecture supports future decomposition if scaling requirements change.
+
+---
+
+## Next Steps
+
+| Goal | Documentation |
+|------|---------------|
+| Review technology selections | [Technology Stack]({% link docs/technology-stack.md %}) |
+| Set up local environment | [Getting Started]({% link docs/getting-started.md %}) |
+| Understand API contracts | [API Documentation]({% link docs/api-documentation.md %}) |
+| Start building features | [Implementation Guidance]({% link docs/implementation-guidance.md %}) |
