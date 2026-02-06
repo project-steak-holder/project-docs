@@ -1,6 +1,6 @@
 title: ""
 description: Comprehensive documentation for Project Steakholder
-theme: just-the-docs # Uncomment this line if running locally
+# theme: just-the-docs # Uncomment this line if running locally
 remote_theme: just-the-docs/just-the-docs
 
 baseurl: "/project-docs"
