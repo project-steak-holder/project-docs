@@ -157,14 +157,13 @@ async def test_unauthorized_access_blocked(db_session):
 
 ### End-to-End Test Scenarios
 
-Integration tests validate complete user workflows across the system.
+Integration tests, orchestrated with Playwright validate complete user workflows across the system.
 
-| Scenario | Steps |
-|----------|-------|
-| User Login | Authenticate via Neon Auth, receive JWT token |
-| Conversation Creation | Create new conversation, verify persistence |
-| Message Exchange | Send message, receive AI response, validate storage |
-| Session Resumption | Log out, log in, verify conversation history intact |
+| Scenario              | Steps                                               |
+|-----------------------|-----------------------------------------------------|
+| User Login            | Authenticate via Neon Auth, receive JWT token       |
+| Conversation Creation | Create new conversation, verify persistence         |
+| Message Exchange      | Send message, receive AI response, validate storage |
 
 ### Example Workflow Test
 
