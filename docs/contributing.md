@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Contributing
-nav_order: 11
+nav_order: 9
+parent: Developer Guide
 ---
 
 # Contributing
@@ -280,21 +281,17 @@ After merge:
 
 ## Documentation Contributions
 
-### Types of Documentation
-
-| Type | Location | Guidelines |
-|------|----------|------------|
-| API Documentation | `docs/api-documentation.md` | Include request/response examples |
-| Architecture | `docs/architecture.md` | Update diagrams when adding components |
-| Guides | `docs/` | Follow existing structure and formatting |
-| Code Comments | Source files | Document public APIs and complex logic |
+The Project StakeHolder Documentation you are reading right now is located in a GitHub repository located at:
+[https://github.com/project-steak-holder/project-docs.git](https://github.com/project-steak-holder/project-docs.git)
+<br>
+The documentation is implemented with Jekyll/JustTheDocs and hosted on GitHub Pages. 
+Contributions to the documentation are welcome and encouraged.
 
 ### Documentation Standards
 
 - Use clear, concise language
 - Include code examples where helpful
 - Keep formatting consistent with existing docs
-- Update the table of contents if adding sections
 
 ---
 
@@ -332,10 +329,36 @@ When requesting a feature:
 
 ## Related Documentation
 
-| Topic | Document |
-|-------|----------|
-| Environment setup | [Getting Started]({% link docs/getting-started.md %}) |
-| Coding standards | [Development Workflows]({% link docs/development-workflows.md %}) |
-| Testing requirements | [Testing Strategy]({% link docs/testing-strategy.md %}) |
-| API reference | [API Documentation]({% link docs/api-documentation.md %}) |
-| Common issues | [Troubleshooting]({% link docs/troubleshooting.md %}) |
+| Topic                | Document                                                          |
+|----------------------|-------------------------------------------------------------------|
+| Environment setup    | [Getting Started]({% link docs/getting-started.md %})             |
+| Coding standards     | [Development Workflows]({% link docs/development-workflows.md %}) |
+| Testing requirements | [Testing Strategy]({% link docs/testing-strategy.md %})           |
+| API reference        | [API Documentation]({% link docs/api-documentation.md %})         |
+| Common issues        | [Troubleshooting]({% link docs/troubleshooting.md %})             |
+
+---
+
+## Other Resources
+
+- [GitHub Repository](https://github.com/orgs/project-steak-holder/repositories)
+- [TanStack Documentation](https://docs.tanstack.com/)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Python Documentation](https://docs.python.org/3/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/en/14/)
+- [Alembic Documentation](https://alembic.sqlalchemy.org/en/latest/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Pytest Documentation](https://docs.pytest.org/en/stable/)
+- [Vitest Documentation](https://vitest.dev/guide/)
+- [Biomes Documentation](https://biomejs.dev/docs/overview)
+- [Ruff Documentation](https://beta.ruff.rs/docs/)
+- [MyPy Documentation](https://mypy.readthedocs.io/en/stable/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Pydantic Documentation](https://pydantic.dev/latest/)
+- [Pydantic AIO Documentation](https://pydantic.dev/latest/aio/)
+- [Google Cloud Platform Documentation](https://cloud.google.com/docs)
+- [Google Cloud Run Documentation](https://cloud.google.com/run/docs)
+- [Google Artifact Registry Documentation](https://cloud.google.com/artifact-registry/docs)
+- [Neon Documentation](https://neon.tech/docs)

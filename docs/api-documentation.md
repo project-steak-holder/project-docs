@@ -1,7 +1,8 @@
 ---
 layout: default
 title: API Documentation
-nav_order: 5
+nav_order: 4
+parent: Developer Guide
 ---
 
 # API Documentation
@@ -167,26 +168,26 @@ All error responses follow a consistent structure:
 }
 ```
 
-### Custom Exceptions
+### Exceptions
 
-| Exception | HTTP Status | Description |
-|-----------|-------------|-------------|
-| ValidationError | 400 | Request validation failed |
-| UnauthorizedError | 401 | Authentication required or invalid |
-| ForbiddenError | 403 | Authenticated but not authorized |
-| NotFoundError | 404 | Requested resource not found |
-| ConflictError | 409 | Resource conflict (e.g., duplicate) |
-| RateLimitError | 429 | Rate limit exceeded |
-| AiTimeoutError | 408 | AI service request timed out |
-| AiUnavailableError | 503 | AI service temporarily unavailable |
+| Exception            | HTTP Status | Description                         |
+|----------------------|-------------|-------------------------------------|
+| ValidationError      | 400         | Request validation failed           |
+| UnauthorizedError    | 401         | Authentication required or invalid  |
+| ForbiddenError       | 403         | Authenticated but not authorized    |
+| NotFoundError        | 404         | Requested resource not found        |
+| ConflictError        | 409         | Resource conflict (e.g., duplicate) |
+| RateLimitError       | 429         | Rate limit exceeded                 |
+| LlmResponseException | 500         | Error in LLM response               |
+| ContextLoadException | 501         | Error loading agent context         |
 
 ---
 
 ## Next Steps
 
-| Goal | Documentation |
-|------|---------------|
-| Understand system architecture | [Architecture]({% link docs/architecture.md %}) |
-| Start implementing features | [Implementation Guidance]({% link docs/implementation-guidance.md %}) |
-| Learn testing practices | [Testing Strategy]({% link docs/testing-strategy.md %}) |
-| Troubleshoot common issues | [Troubleshooting]({% link docs/troubleshooting.md %}) |
+| Goal                           | Documentation                                                         |
+|--------------------------------|-----------------------------------------------------------------------|
+| Understand system architecture | [Architecture]({% link docs/architecture.md %})                       |
+| Start implementing features    | [Implementation Guidance]({% link docs/implementation-guidance.md %}) |
+| Learn testing practices        | [Testing Strategy]({% link docs/testing-strategy.md %})               |
+| Troubleshoot common issues     | [Troubleshooting]({% link docs/troubleshooting.md %})                 |
