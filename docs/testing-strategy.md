@@ -112,6 +112,8 @@ The data access layer requires thorough testing to ensure data integrity and sec
 
 ### Test Scenarios
 
+Data layer testing is included in frontend and backend unit testing, focusing on data validation.
+
 | Scenario | Description |
 |----------|-------------|
 | Conversation Creation | Verify conversations are created with correct metadata |
