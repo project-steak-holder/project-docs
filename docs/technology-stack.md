@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Technology Stack
-nav_order: 4
+nav_order: 3
+parent: Developer Guide
 ---
 
 # Technology Stack
@@ -10,14 +11,14 @@ This document outlines the technologies used in the Stakeholder Agent System and
 
 ## Overview
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| Front-End | TypeScript, TanStack Start | Browser-based chat interface |
-| AI Service | Python, Pydantic AI | Prompt orchestration, AI guardrails |
-| Data Store | Neon Postgres | Persistent storage |
-| Communication | REST APIs | Service integration |
-| Authentication | Neon Auth | Identity and session management |
-| Hosting | AWS | Cloud infrastructure |
+| Layer          | Technology                          | Purpose                                  |
+|----------------|-------------------------------------|------------------------------------------|
+| Front-End      | TypeScript, TanStack Start, Node.js | Browser-based chat interface             |
+| AI Service     | Python, Pydantic AI, FastAPI        | Prompt orchestration, AI guardrails      |
+| Data Store     | Neon Postgres                       | Persistent storage                       |
+| Communication  | REST APIs                           | Service integration                      |
+| Authentication | Neon Auth                           | Identity and session management          |
+| Hosting        | Google Cloud Platform               | Cloud infrastructure                     |
 
 ## Frontend
 
@@ -32,6 +33,15 @@ TanStack Start serves as the foundation for the responsive chat interface. This 
 - Modern React-based architecture with server-side rendering capabilities
 - Type-safe routing and data fetching
 - Optimized client-side state management for real-time chat interactions
+
+### Node.js
+
+Node.js is used for the frontend build and development environment, enabling:
+
+- Efficient package management with npm
+- Fast development server with hot module replacement
+- Compatibility with modern TypeScript tooling and libraries
+- Seamless integration with TanStack Start and other frontend dependencies
 
 ## Backend / AI Service
 
@@ -52,6 +62,15 @@ Pydantic AI provides the framework for AI orchestration, offering:
 - Built-in support for context assembly and guardrails
 - Token budget management and rate limiting capabilities
 
+### FastAPI
+
+FastAPI is the web framework for the backend service, chosen for:
+- High performance with async support
+- Automatic OpenAPI documentation generation
+- Easy integration with Pydantic for request validation
+- Developer-friendly features that enhance productivity and maintainability
+- Seamless injection of Neon Auth for authentication and session management
+
 ## Data Storage
 
 ### Neon Postgres
@@ -68,9 +87,9 @@ For details on persisted entities and data flow, see [Architecture]({% link docs
 
 ## Infrastructure
 
-### AWS Cloud Platform
+### Google Cloud Platform
 
-AWS provides the hosting infrastructure with:
+GCP provides the hosting infrastructure with:
 
 - Scalable compute resources for the stateless backend design
 - Network security and TLS encryption

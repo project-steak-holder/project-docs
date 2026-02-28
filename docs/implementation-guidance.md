@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Implementation Guidance
-nav_order: 7
+nav_order: 6
+parent: Developer Guide
 ---
 
 # Implementation Guidance
@@ -93,16 +94,14 @@ See [API Documentation]({% link docs/api-documentation.md %}) for the current en
 
 ### Working with AI Integration
 
-The AI provider is accessed through an abstraction layer that handles:
+The AI provider is accessed through pydantic AI, which abstracts the underlying provider details.:
 
-- Retry logic with exponential backoff
 - Content guardrails and filtering
 - Provider-specific prompt formatting
 - Token budget management
 
 **Key considerations:**
-- Use the established adapter interface, not direct provider calls
-- Implement appropriate timeouts for AI requests
+- Use the established Pydantic AI agent interface, not direct provider calls
 - Handle `AiTimeoutError` and `AiUnavailableError` gracefully
 
 See [Architecture - AI Provider Abstraction]({% link docs/architecture.md %}#ai-provider-abstraction-layer) for design details.
@@ -134,7 +133,6 @@ Authentication is handled by Neon Auth.
 
 **Key patterns:**
 - All API requests require a valid JWT token
-- Use role-based access control (RBAC) for authorization
 - Implement tenant-level data isolation
 
 See [API Documentation]({% link docs/api-documentation.md %}#overview) for authentication details.
@@ -145,11 +143,11 @@ See [API Documentation]({% link docs/api-documentation.md %}#overview) for authe
 
 When implementing features, ensure your code meets these quality attributes:
 
-| Attribute | Target | Reference |
-|-----------|--------|-----------|
-| Response time | < 5s for 95% of requests | [Architecture - Performance]({% link docs/architecture.md %}#performance) |
-| Test coverage | 80%+ for services | [Testing Strategy]({% link docs/testing-strategy.md %}#test-coverage-requirements) |
-| Error handling | Consistent error format | [API Documentation - Error Handling]({% link docs/api-documentation.md %}#error-handling) |
+| Attribute       | Target                              | Reference                                                                                  |
+|-----------------|-------------------------------------|--------------------------------------------------------------------------------------------|
+| Response time   | (unacheived) < 5 sec response time  | [Architecture - Performance]({% link docs/architecture.md %}#performance)                  |
+| Test coverage   | 75%+ for services                   | [Testing Strategy]({% link docs/testing-strategy.md %}#test-coverage-requirements)         |
+| Error handling  | Consistent error format             | [API Documentation - Error Handling]({% link docs/api-documentation.md %}#error-handling)  |
 
 ---
 

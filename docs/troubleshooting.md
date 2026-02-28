@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Troubleshooting
-nav_order: 10
+nav_order: 8
+parent: Developer Guide
 ---
 
 # Troubleshooting

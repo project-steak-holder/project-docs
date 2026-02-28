@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Getting Started
-nav_order: 2
+nav_order: 1
+parent: Developer Guide
 ---
 
 # Getting Started
@@ -12,13 +13,13 @@ This guide covers the minimum steps to clone, configure, and run the Stakeholder
 
 Before you begin, ensure you have the required tools installed:
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| Node.js | v20+ | Frontend runtime |
-| Python | 3.11+ | Backend runtime |
-| Docker | Latest stable | Containerization |
-| PostgreSQL | 15+ | Database |
-| Git | Latest | Version control |
+| Tool       | Version       | Purpose                 |
+|------------|---------------|-------------------------|
+| Node.js    | v20+          | Frontend runtime        |
+| Python     | 3.11+         | Backend runtime         |
+| Docker     | Latest stable | Containerization        |
+| PostgreSQL | 15+           | Database                |
+| Git        | Latest        | Version control         |
 
 For complete development environment details, see [Development Workflows]({% link docs/development-workflows.md %}).
 
@@ -56,7 +57,8 @@ git clone https://github.com/project-steak-holder/ai-backend.git
 3. **Install dependencies:**
 
    ```bash
-   pip install -r requirements.txt
+   curl https://uvm.astral.sh/install.sh | sh
+   uv sync
    ```
 
 4. **Configure environment variables:**

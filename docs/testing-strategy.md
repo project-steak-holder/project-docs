@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Testing Strategy
-nav_order: 8
+nav_order: 7
+parent: Developer Guide
 ---
 
 # Testing Strategy
@@ -18,14 +19,15 @@ Testing is an integral part of the development process. Tests should be written 
 
 ### Framework
 
-| Tool | Purpose |
-|------|---------|
-| vitest | Unit and component testing |
+| Tool   | Purpose                                     |
+|--------|---------------------------------------------|
+| Biomes | Unit, and component and integration testing |
 
 ### Testing Focus Areas
 
 - **Unit Tests**: Business logic, utilities, and helper functions
 - **Component Tests**: UI interactions, rendering, and user events
+- **Integration Tests**: API communication, state management, user flows
 
 ### Best Practices
 
@@ -110,6 +112,8 @@ The data access layer requires thorough testing to ensure data integrity and sec
 
 ### Test Scenarios
 
+Data layer testing is included in frontend and backend unit testing, focusing on data validation.
+
 | Scenario | Description |
 |----------|-------------|
 | Conversation Creation | Verify conversations are created with correct metadata |
@@ -153,14 +157,13 @@ async def test_unauthorized_access_blocked(db_session):
 
 ### End-to-End Test Scenarios
 
-Integration tests validate complete user workflows across the system.
+Integration tests, orchestrated with Playwright validate complete user workflows across the system.
 
-| Scenario | Steps |
-|----------|-------|
-| User Login | Authenticate via Neon Auth, receive JWT token |
-| Conversation Creation | Create new conversation, verify persistence |
-| Message Exchange | Send message, receive AI response, validate storage |
-| Session Resumption | Log out, log in, verify conversation history intact |
+| Scenario              | Steps                                               |
+|-----------------------|-----------------------------------------------------|
+| User Login            | Authenticate via Neon Auth, receive JWT token       |
+| Conversation Creation | Create new conversation, verify persistence         |
+| Message Exchange      | Send message, receive AI response, validate storage |
 
 ### Example Workflow Test
 
@@ -201,43 +204,22 @@ async def test_complete_conversation_flow(client, auth_token):
 
 ---
 
-## Load Testing
 
-Load testing ensures the system performs under expected production load.
-
-### Test Configuration
-
-| Metric | Target |
-|--------|--------|
-| Concurrent Users | 30 |
-| Target Endpoints | GetMessageHistory, SendMessage |
-| Test Duration | Sustained load period |
-
-### Monitored Metrics
-
-- Response time (p50, p95, p99)
-- Throughput (requests per second)
-- Error rate
-- Resource utilization (CPU, memory, database connections)
 
 ### Acceptance Criteria
 
-| Metric | Threshold |
-|--------|-----------|
-| Response Time (p95) | < 500ms |
-| Error Rate | < 1% |
-| Throughput | Stable under load |
+Acceptance testers validate whether each functional requirement is met from an end-user perspective.
 
 ---
 
 ## Test Coverage Requirements
 
-| Component | Minimum Coverage |
-|-----------|------------------|
-| Frontend Business Logic | 80% |
-| Backend Services | 80% |
-| API Endpoints | 100% |
-| Data Access Layer | 90% |
+| Component               | Minimum Coverage |
+|-------------------------|------------------|
+| Frontend Business Logic | 75%              |
+| Backend Services        | 100%             |
+| API Endpoints           | 100%             |
+| Data Access Layer       | 90%              |
 
 ### Running Tests
 

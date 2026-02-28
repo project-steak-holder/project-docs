@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Development Workflows
-nav_order: 6
+nav_order: 5
+parent: Developer Guide
 ---
 
 # Development Workflows
@@ -10,7 +11,8 @@ This document outlines the development environment setup, coding standards, and 
 
 ## Prerequisites
 
-Before starting development, ensure you have the required tools installed and configured. For complete installation instructions and repository setup, see [Getting Started]({% link docs/getting-started.md %}).
+Before starting development, ensure you have the required tools installed and configured. 
+For complete installation instructions and repository setup, see [Getting Started]({% link docs/getting-started.md %}).
 
 ---
 
@@ -157,19 +159,21 @@ The `main` branch is protected with the following requirements:
 
 ## CI/CD Pipeline
 
-The project uses Jenkins pipelines triggered from GitHub events.
+The project uses GitHub Actions pipelines triggered from GitHub events.
 
 ### Pipeline Stages
 
 ```
-Build --> Test --> Deploy
+Build --> Lint--> TypeCheck--> Test --> Deploy
 ```
 
-| Stage | Description |
-|-------|-------------|
-| **Build** | Install dependencies, compile assets |
-| **Test** | Run unit tests and integration tests |
-| **Deploy** | Build Docker images and deploy to AWS |
+| Stage         | Description                                         |
+|---------------|-----------------------------------------------------|
+| **Build**     | Install dependencies, compile assets                |
+| **Lint**      | Run linters (Biomes for frontend, ruff for backend) |
+| **TypeCheck** | Run type checker (MyPy for backend)                 |
+| **Test**      | Run unit and integration tests                      |
+| **Deploy**    | Build Docker images and deploy to GCP               |
 
 ### Pipeline Configuration
 
@@ -179,15 +183,6 @@ Pipelines are defined in the repository and automatically triggered on:
 - Pull request creation/update
 - Manual trigger for deployments
 
-### Deployment Environments
-
-| Environment | Trigger | Purpose |
-|-------------|---------|---------|
-| Development | PR merge to main | Testing and validation |
-| Staging | Manual promotion | Pre-production testing |
-| Production | Manual promotion | Live environment |
-
----
 
 ## Next Steps
 

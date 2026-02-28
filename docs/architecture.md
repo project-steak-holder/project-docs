@@ -1,48 +1,38 @@
 ---
 layout: default
 title: Architecture
-nav_order: 3
+nav_order: 2
+parent: Developer Guide
 ---
 
 # Architecture
 
-The Stakeholder Agent System follows a multi-tier web application architecture designed for reliability, responsiveness, and ease of evolution. The system separates concerns across distinct tiers: a browser-based front-end application, a backend AI service handling prompt orchestration, and a durable data store for persistence. External platform services provide authentication, AI capabilities, and cloud hosting.
-
-## Architecture Diagram
-
-The system consists of four primary tiers that communicate through well-defined interfaces:
-
-```
-+------------------+     REST API      +------------------+
-|                  | ----------------> |                  |
-|   Front-End      |                   |   AI Service     |
-|   Application    | <---------------- |   (Python)       |
-|   (TypeScript)   |     JSON          |                  |
-+------------------+                   +--------+---------+
-        |                                       |
-        |                                       |
-        v                                       v
-+------------------+                   +------------------+
-|    Neon Auth     |                   |   Data Store     |
-|                  |                   |   (Neon Postgres)|
-+------------------+                   +--------+---------+
-                                                |
-                                       +--------v---------+
-                                       |   AI Provider    |
-                                       |   (LLM Adapter)  |
-                                       +------------------+
-```
+The Stakeholder Agent System follows a multi-tier web application architecture designed for reliability, responsiveness, and ease of evolution. 
+The system separates concerns across distinct tiers: a browser-based front-end application and a backend AI service handling prompt orchestration.
+External platform services provide authentication, data storage, and cloud hosting.
+A privately hosted Large Language Model (LLM) serves as the AI provider.
 
 **Data Flow:**
 
-1. Users interact with the browser-based chat interface
-2. The front-end authenticates users via Neon Auth
-3. User messages are sent to the AI Service via REST API
-4. The AI Service applies guardrails and orchestrates prompts
-5. AI requests flow through an adapter layer to the external LLM provider
-6. All session data, chat history, and captured requirements persist to Neon Postgres
+1. Users interact with browser-based chat interface
+2. Front-End authenticates users via Neon Auth
+3. User messages sent to the AI Service via REST API
+4. FastAPI validates request JWT with Neon Auth and extracts user context
+5. AI Service leverages Pydantic AI agent for prompt orchestration, context management, and guardrails
+6. AI service calls LLM provider to generate responses
+7. Request and Response persisted to Neon Postgres for durability
+8. Response propagated back to the UI for display
+
+### Infrastructure: 
+- All session data and chat history persist to Neon Postgres (external)
+- Authentication through Neon Auth, injected into frontend TanStack router and backend FastAPI service (external)
+- CI/CD pipelines: lint, typecheck, test, build, and deploy backend and frontend services to GCP with GitHub Actions
+- Cloud hosting on Google Cloud Platform (GCP) with managed services for compute and networking
+
 
 ### C4 Model Diagrams
+
+<br>
 
 **Level 1: Context Diagram**
 
@@ -52,15 +42,24 @@ The system consists of four primary tiers that communicate through well-defined 
 
 ![C4 Container Diagram]({{ site.baseurl }}/assets/c4-2.png)
 
-**Level 3: Component Diagram**
+**Level 3: Component Diagrams**
 
 ![C4 Component Diagram]({{ site.baseurl }}/assets/c4-3.png)
+
+![C4 Component Diagram]({{ site.baseurl }}/assets/compo-2.png)
+
+**Level 4: Class Diagrams**
+
+![C4 Class Diagram]({{ site.baseurl }}/assets/class-diag.png)
+
 
 ## Key Components
 
 ### Front-End Application
 
-The browser-based web application provides the primary user interface for stakeholder interactions. Built with TypeScript and TanStack Start, it delivers a responsive chat interface that enables natural conversational flow during requirements elicitation sessions.
+The browser-based web application provides the primary user interface for stakeholder interactions. 
+Built with TypeScript and TanStack Start, and Node. 
+It delivers a responsive chat interface that enables natural conversational flow during requirements elicitation sessions.
 
 **Responsibilities:**
 
@@ -71,7 +70,9 @@ The browser-based web application provides the primary user interface for stakeh
 
 ### AI Service
 
-The Python-based backend service serves as the central orchestration layer for all AI-powered interactions. Built with Pydantic AI, it manages the complexity of prompt engineering, context management, and integration with external AI providers.
+The Python-based backend service serves as the central orchestration layer for all AI-powered interactions. 
+Built with Pydantic AI and FastAPI,
+ it manages the complexity of prompt engineering, context management, and integration with external AI providers.
 
 **Responsibilities:**
 
@@ -81,22 +82,22 @@ The Python-based backend service serves as the central orchestration layer for a
 
 ### Data Store
 
-Neon Postgres provides durable persistence for all application state. As a serverless Postgres platform, Neon ensures session continuity and enables recovery from service interruptions while offering scalable, managed database infrastructure.
+Neon Postgres provides durable persistence for all application state. 
+As a serverless Postgres platform, Neon ensures session continuity and enables recovery from service interruptions while offering scalable, managed database infrastructure.
 
 **Persisted Entities:**
 
 - User accounts and profiles
 - Session metadata and configuration
 - Complete chat history
-- Captured requirements and artifacts
 
 ### External Platform Services
 
 **Neon Auth:** Handles identity verification, session management, and token management, allowing the system to delegate security concerns to a specialized service integrated with the Neon platform.
 
-**AI Provider:** Large language model access through a controlled adapter layer that provides abstraction, retry logic, and resilience patterns.
+**AI Provider:** Organizationally managed oLlamma instance Large Language Model. 
 
-**Cloud Hosting:** AWS infrastructure provides scalable compute, storage, and networking capabilities.
+**Cloud Hosting:** Google Cloud Platform infrastructure provides scalable compute, storage, and networking capabilities.
 
 ## Architectural Drivers
 
@@ -108,7 +109,7 @@ Session durability is critical for a practice environment where users invest sig
 
 - **Stateless backend design** - The AI Service maintains no in-memory state, enabling horizontal scaling and seamless recovery
 - **Durable data tier** - All session state persists to Neon Postgres before acknowledgment
-- **Circuit breaker patterns** - AI provider outages are isolated and handled gracefully
+- **Cloud hosting** - Google Cloud Platform provides infrastructure resilience and health monitoring
 
 ### Performance
 
@@ -116,40 +117,40 @@ Responsive conversational interaction is essential for maintaining natural dialo
 
 - **Asynchronous AI calls** - Non-blocking I/O prevents thread starvation during LLM inference
 - **Connection pooling** - Database connections are reused to minimize latency overhead
-- **Token budgeting** - Context windows are managed to balance response quality with latency
+- **Token budgeting** - Context windows are managed with a history summarizer agent component to balance response quality with latency
 
 ### Modifiability
 
 The system must evolve to support new stakeholder personas, project scenarios, and potentially different AI providers.
 
 - **Externalized configuration** - Personas and scenarios are data-driven, not hard-coded
-- **AI provider abstraction** - An adapter layer isolates provider-specific implementation details
+- **AI provider abstraction** - Pydantic AI's agent model allows for pluggable provider integration, enabling future substitution without service changes
 - **Modular boundaries** - Clear separation between tiers enables independent evolution
 
 ## Quality Attributes
 
 ### Performance Tactics
 
-| Tactic             | Implementation                                                    |
-| ------------------ | ----------------------------------------------------------------- |
-| Async I/O          | Non-blocking calls to AI provider and database                    |
-| Context Caching    | Stable conversation context cached to reduce redundant processing |
-| Connection Pooling | Reusable database connections minimize connection overhead        |
-| Rate Limiting      | Request throttling prevents system overload                       |
+| Tactic             | Implementation                                                |
+|--------------------|---------------------------------------------------------------|
+| Async I/O          | Non-blocking calls to AI provider and database                |
+| Connection Pooling | Reusable database connections minimize connection overhead    |
+| horizontal Scaling | Stateless design allows adding cloud instances to handle load |
+| Rate Limiting      | Request throttling prevents system overload                   |
 
 ### Availability Tactics
 
 | Tactic                 | Implementation                                         |
-| ---------------------- | ------------------------------------------------------ |
+|------------------------|--------------------------------------------------------|
 | Exponential Backoff    | Retries with increasing delays for transient failures  |
 | Circuit Breaker        | Fast failure when AI provider is unresponsive          |
 | Health Checks          | Continuous monitoring of service and dependency health |
-| Reliable State Storage | Session state persisted before user acknowledgment     |
+| Reliable State Storage | Session state persisted to Neon durable storage        |
 
 ### Security Tactics
 
 | Tactic           | Implementation                                    |
-| ---------------- | ------------------------------------------------- |
+|------------------|---------------------------------------------------|
 | RBAC             | Role-based access control for authorization       |
 | Data Isolation   | Tenant-level separation of session data           |
 | TLS              | Encrypted communication for all network traffic   |
@@ -159,8 +160,8 @@ The system must evolve to support new stakeholder personas, project scenarios, a
 ### Modifiability Tactics
 
 | Tactic                    | Implementation                                                 |
-| ------------------------- | -------------------------------------------------------------- |
-| Data-Driven Configuration | Personas and scenarios stored as configuration data            |
+|---------------------------|----------------------------------------------------------------|
+| Data-Driven Configuration | Personas and project scenarios stored as configuration data    |
 | Layered Architecture      | Clear boundaries between presentation, service, and data tiers |
 | Provider Abstraction      | Pluggable interface for AI provider integration                |
 
@@ -177,15 +178,6 @@ The AI Service maintains no in-memory session state. All state is persisted to t
 - Horizontal scaling without session affinity
 - Simplified recovery from service restarts
 - Consistent behavior across service instances
-
-### AI Provider Abstraction Layer
-
-AI integration is isolated behind an adapter interface that handles:
-
-- Retry logic with exponential backoff
-- Content guardrails and filtering
-- Provider-specific prompt formatting
-- Future provider substitution without service changes
 
 ### Delegated Authentication
 
@@ -213,6 +205,8 @@ The backend is implemented as a single logical service rather than decomposed mi
 - Avoids premature optimization for scale not yet required
 
 The architecture supports future decomposition if scaling requirements change.
+
+
 
 ---
 
