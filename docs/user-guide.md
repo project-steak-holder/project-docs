@@ -10,6 +10,8 @@ Welcome to the User Guide. This section will help new users get started with the
 
 Don't Worry, The Stakeholder Agent interface is designed to be intuitive for anyone who's used any AI agent or chat interface before.
 
+## Step-by-Step Instructions
+
 ### Step 1: 
 Navigate to [steakholderagent.org](https://steakholderagent.org)
 
@@ -31,7 +33,7 @@ Start a new chat session, with either the persistent button at the bottom of the
 </p>
 
 ### Step 4:
-Start chatting with the agent! Owen is created to behave as the owner of Golden Bikes, a bike rental company Located in Golden, CO.
+Start chatting with the agent! Owen is created to behave as the owner of Golden Bikes, a bike rental company located in Golden, CO.
 He is designed to practice requirement elicitation for a software project.  So ask away, and refine your technique!
 
 <p align="center">

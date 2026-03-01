@@ -94,7 +94,7 @@ See [API Documentation]({% link docs/api-documentation.md %}) for the current en
 
 ### Working with AI Integration
 
-The AI provider is accessed through pydantic AI, which abstracts the underlying provider details.:
+The AI provider is accessed through pydantic AI, which abstracts the underlying provider details:
 
 - Content guardrails and filtering
 - Provider-specific prompt formatting
@@ -102,7 +102,7 @@ The AI provider is accessed through pydantic AI, which abstracts the underlying 
 
 **Key considerations:**
 - Use the established Pydantic AI agent interface, not direct provider calls
-- Handle `AiTimeoutError` and `AiUnavailableError` gracefully
+- Handle `llm-Response-error` and `context-load-exception` gracefully
 
 See [Architecture - AI Provider Abstraction]({% link docs/architecture.md %}#ai-provider-abstraction-layer) for design details.
 
