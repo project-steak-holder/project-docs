@@ -19,9 +19,9 @@ Testing is an integral part of the development process. Tests should be written 
 
 ### Framework
 
-| Tool   | Purpose                                     |
-|--------|---------------------------------------------|
-| Biomes | Unit, and component and integration testing |
+| Tool   | Purpose                                  |
+|--------|------------------------------------------|
+| Biomes | Unit, component, and integration testing |
 
 ### Testing Focus Areas
 
@@ -157,7 +157,7 @@ async def test_unauthorized_access_blocked(db_session):
 
 ### End-to-End Test Scenarios
 
-Integration tests, orchestrated with Playwright validate complete user workflows across the system.
+Integration tests, orchestrated with Playwright, validate complete user workflows across the system.
 
 | Scenario              | Steps                                               |
 |-----------------------|-----------------------------------------------------|
