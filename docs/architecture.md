@@ -95,7 +95,7 @@ As a serverless Postgres platform, Neon ensures session continuity and enables r
 
 **Neon Auth:** Handles identity verification, session management, and token management, allowing the system to delegate security concerns to a specialized service integrated with the Neon platform.
 
-**AI Provider:** Organizationally managed oLlamma instance Large Language Model. 
+**AI Provider:** Goggle Gemini 2.5 Fast API
 
 **Cloud Hosting:** Google Cloud Platform infrastructure provides scalable compute, storage, and networking capabilities.
 
