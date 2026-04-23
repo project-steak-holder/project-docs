@@ -19,10 +19,10 @@ Navigate to [steakholderagent.org](https://steakholderagent.org)
 Sign in with Google or create an account.
 
 <p align="center">
-  <img src="/project-docs/assets/sign-in-page.png" alt="Sign In Page" width="200" style="display: block; margin: 0 auto;" />
+  <img src="/project-docs/assets/sign-in-page.png" alt="Sign In Page" width="400" style="display: block; margin: 0 auto;" />
 </p>
 <p align="center">
-  <img src="/project-docs/assets/sign-up.png" alt="Sign Up Page" width="200" style="display: block; margin: 0 auto;" />
+  <img src="/project-docs/assets/sign-up.png" alt="Sign Up Page" width="400" style="display: block; margin: 0 auto;" />
 </p>
 
 ### Step 3:

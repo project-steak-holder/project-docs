@@ -136,6 +136,13 @@ CMD ["node", ".output/server/index.mjs"]
 <br>
 Each component's CI/CD pipeline, orchestrated in GitHub Actions, terminates by publishing updated container images to the Google Artifact Registry, which in turn allows Google Cloud Run to launch the updated image.
 <br>
+<br>
+A staging environment is available for testing before promoting merged branchesto production.  Each component has it's own staging URL and staging database tables in Neon for integration testing.  These are the URLs for the staging environment:
+
+- ai-frontend: [https://ai-frontend-staging-230883465270.us-central1.run.app](https://ai-frontend-staging-230883465270.us-central1.run.app)
+- ai-service: [https://ai-server-staging-230883465270.us-central1.run.app](https://ai-server-staging-230883465270.us-central1.run.app)
+
+<br>
 
 ---
 
@@ -143,11 +150,16 @@ Each component's CI/CD pipeline, orchestrated in GitHub Actions, terminates by p
 
 | Service                  | Purpose                 | Configuration           |
 |--------------------------|-------------------------|-------------------------|
-| Google Artifact Registry | houses container Images | native platform service |
+| Google Artifact Registry | houses container images | native platform service |
 | ai-frontend              | front-end application   | Docker container        |
+| ai-frontend (staging)    | front-end application   | Docker container        |
 | ai-service               | back-end service        | Docker container        |
+| ai-service (staging)     | back-end service        | Docker container        |
 | Neon Postgres DB         | database                | managed service         |
+| Neon Postgres DB (staging) | database              | managed service         |
 | Neon Auth                | authentication          | managed service         |
+| Neon Auth (staging)      | authentication          | managed service         |
+| Gemini 2.5 Fast model    | AI model                | API key                 |
 
 <br>
 
@@ -180,10 +192,12 @@ The CI/CD pipeline is initiated when a Pull Request is created.
 | Team review      | human review of code                    | CodeRabbitAI run      |
 | Approve/Merge PR | Manual approval for merge               | Team review complete  |
 | Lint             | Linting (ruff, Biome)                   | Merge to main         |
-| Type check       | Type-checking (MyPy, back-end only)     | All branches          |
+| Type check       | Type-checking (MyPy/back-end)     | All branches          |
 | Test             | Unit/Integration Tests (pytest, vitest) | All branches          |
 | Docker build     | Build and push images                   | Testing passes        |
-| Deploy to cloud  | Deploy to Google Artifact Registry      | Build successful      |
+| Deploy to Staging | Deploy to Google Artifact Registry      | Build successful      |
+| Integration testing in Staging | Test deployed services | After branch merged to staging |
+| Merge from Staging to Production | Merge staging to production | After integration testing passes |
 | Google Cloud Run | Runs container                          | Push to GAR           |
 
 
@@ -206,7 +220,7 @@ The CI/CD pipeline is initiated when a Pull Request is created.
 |----------------------|--------------------------|-----------------|
 | DATABASE_URL         | Neon Postgres connection | Secrets Manager |
 | NODE_ENV             | Node environment         | Secrets Manager |
-| VITE_AI_SERVICE_BASE | service confoguration    | Secrets Manager |
+| VITE_AI_SERVICE_BASE_URL | service confoguration    | Secrets Manager |
 | VITE_NEON_AUTH_URL   | Auth confoguration       | Secrets Manager |
 | VITE_API_URL         | Port configuration       | Secrets Manager |
 | VITE_AUTH_DOMAIN     | Auth domain              | Secrets Manager |

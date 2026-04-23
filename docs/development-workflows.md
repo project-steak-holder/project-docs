@@ -144,12 +144,14 @@ class UserService:
    - All CI checks must pass
 
 6. **Merge and Cleanup**
-   - Merge to main branch
+   - Merge to staging branch
    - Delete feature branch
+   - Integration test in Staging
+   - Merge to Production (Main)
 
 ### Branch Protection Rules
 
-The `main` branch is protected with the following requirements:
+The `main` and `staging` branchs are protected with the following requirements:
 
 - All CI builds must pass
 - Minimum 1 approving review required
@@ -164,7 +166,7 @@ The project uses GitHub Actions pipelines triggered from GitHub events.
 ### Pipeline Stages
 
 ```
-Build --> Lint--> TypeCheck--> Test --> Deploy
+Build --> Lint--> TypeCheck--> Test --> Stage--> Deploy
 ```
 
 | Stage         | Description                                         |
@@ -173,12 +175,14 @@ Build --> Lint--> TypeCheck--> Test --> Deploy
 | **Lint**      | Run linters (Biomes for frontend, ruff for backend) |
 | **TypeCheck** | Run type checker (MyPy for backend)                 |
 | **Test**      | Run unit and integration tests                      |
-| **Deploy**    | Build Docker images and deploy to GCP               |
+| **Stage**     | Build Docker images and deploy to GCP Staging       |
+| **Deploy**    | Once verified, merge to Production                  |
 
 ### Pipeline Configuration
 
 Pipelines are defined in the repository and automatically triggered on:
 
+- Push to `staging` branch
 - Push to `main` branch
 - Pull request creation/update
 - Manual trigger for deployments
