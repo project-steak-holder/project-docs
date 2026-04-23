@@ -13,8 +13,8 @@ This document provides comprehensive API reference documentation for the platfor
 
 | Property | Value |
 |----------|-------|
-| Base Path | `/api/v1` |
-| Content-Type | `application/json` |
+| Base Path | `/api/v2` |
+| Content-Type | Request: `application/json`, Response (streaming): `text/event-stream` |
 | Authentication | Bearer JWT tokens via Neon Auth |
 
 All API requests must include a valid JWT token in the Authorization header:
@@ -27,22 +27,23 @@ Authorization: Bearer <token>
 
 ## Endpoints
 
-### AIController (MVP1)
+### AIController 
 
-#### Generate Chat Response
+#### Generate Chat Response (Streaming)
 
 Creates a new AI-generated response within a conversation.
 
 ```
-POST /api/v1/generate
+POST /api/v2/generate/stream
 ```
 
 **Request Body**
 
+The `user_id` is derived from the Bearer token and is not included in the request body.
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `conversation_id` | string | Yes | Unique identifier for the conversation |
-| `user_id` | string | Yes | Unique identifier for the user |
 | `content` | string | Yes | The user's message content |
 
 **Example Request**
@@ -50,33 +51,32 @@ POST /api/v1/generate
 ```json
 {
   "conversation_id": "conv_abc123",
-  "user_id": "user_xyz789",
   "content": "What are the key requirements for this feature?"
 }
 ```
 
-**Response Body**
+**Response**
+
+This endpoint returns a Server-Sent Events (SSE) stream (`text/event-stream`). Each event is a `data:` line containing a JSON payload.
+
+**Event payloads**
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `conversation_id` | string | Unique identifier for the conversation |
-| `user_id` | string | Unique identifier for the user |
-| `content` | string | The AI-generated response |
-| `type` | MessageType | The type of message |
-| `created_at` | datetime | Timestamp when the message was created |
-| `updated_at` | datetime | Timestamp when the message was last updated |
+| `content` | string | The streamed chunk content (partial) or the full response (complete) |
+| `partial` | boolean | Present and `true` for partial chunks |
+| `complete` | boolean | Present and `true` for the terminal event |
+| `error` | boolean | Present and `true` if the stream terminated with an error |
 
-**Example Response**
+**Example stream**
 
-```json
-{
-  "conversation_id": "conv_abc123",
-  "user_id": "user_xyz789",
-  "content": "Based on the context, here are the key requirements...",
-  "type": "assistant",
-  "created_at": "2026-02-05T10:30:00Z",
-  "updated_at": "2026-02-05T10:30:00Z"
-}
+```text
+data: {"content":"Based on the context, ","partial":true}
+
+data: {"content":"here are the key requirements...","partial":true}
+
+data: {"content":"Based on the context, here are the key requirements...","complete":true}
+
 ```
 
 **Status Codes**
@@ -95,24 +95,11 @@ POST /api/v1/generate
 
 ---
 
-### Future Endpoints
-
-The following endpoints are planned for future releases:
-
-| Controller | Endpoints | Description |
-|------------|-----------|-------------|
-| PersonaController | `GET/POST/PUT/DELETE /api/v1/personas` | Manage AI personas |
-| ProjectController | `GET/POST/PUT/DELETE /api/v1/project` | Manage projects |
-| ScenarioController | `GET/POST/PUT/DELETE /api/v1/scenario` | Manage scenarios |
-| RequirementController | `GET/POST/PUT/DELETE /api/v1/requirement` | Manage requirements |
-
----
-
 ## Rate Limiting
 
 Rate limits are enforced to ensure fair usage and system stability.
 
-### Limits for `/api/v1/generate`
+### Limits for `/api/v2/generate/stream`
 
 | Scope | Limit |
 |-------|-------|

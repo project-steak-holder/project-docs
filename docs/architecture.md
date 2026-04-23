@@ -40,13 +40,13 @@ A privately hosted Large Language Model (LLM) serves as the AI provider.
 
 **Level 2: Container Diagram**
 
-![C4 Container Diagram]({{ site.baseurl }}/assets/c4-2.png)
+![C4 Container Diagram]({{ site.baseurl }}/assets/deployment.png)
 
 **Level 3: Component Diagrams**
 
-![C4 Component Diagram]({{ site.baseurl }}/assets/c4-3.png)
+![C4 Component Diagram]({{ site.baseurl }}/assets/front-end.png)
 
-![C4 Component Diagram]({{ site.baseurl }}/assets/compo-2.png)
+![C4 Component Diagram]({{ site.baseurl }}/assets/back-end.png)
 
 **Level 4: Class Diagrams**
 
