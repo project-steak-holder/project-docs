@@ -151,7 +151,7 @@ class UserService:
 
 ### Branch Protection Rules
 
-The `main` and `staging` branchs are protected with the following requirements:
+The `main` and `staging` branches are protected with the following requirements:
 
 - All CI builds must pass
 - Minimum 1 approving review required

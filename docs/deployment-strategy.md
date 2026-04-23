@@ -137,10 +137,7 @@ CMD ["node", ".output/server/index.mjs"]
 Each component's CI/CD pipeline, orchestrated in GitHub Actions, terminates by publishing updated container images to the Google Artifact Registry, which in turn allows Google Cloud Run to launch the updated image.
 <br>
 <br>
-A staging environment is available for testing before promoting merged branchesto production.  Each component has it's own staging URL and staging database tables in Neon for integration testing.  These are the URLs for the staging environment:
-
-- ai-frontend: [https://ai-frontend-staging-230883465270.us-central1.run.app](https://ai-frontend-staging-230883465270.us-central1.run.app)
-- ai-service: [https://ai-server-staging-230883465270.us-central1.run.app](https://ai-server-staging-230883465270.us-central1.run.app)
+A staging environment is available for testing before promoting merged branches to production.  Each component has it's own staging URL and staging database tables in Neon for integration testing.  Staging URLs contain secrets and thus cannot be shared here.  Please contact the project maintainer for access to the staging environment.
 
 <br>
 
